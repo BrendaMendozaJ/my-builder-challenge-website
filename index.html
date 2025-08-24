@@ -138,6 +138,33 @@
     <p style="text-align: center; color: var(--text-secondary); margin-bottom: 30px; font-size: 1.1rem;">
       Always excited to connect with fellow cloud enthusiasts and developers!
     </p>
+    
+    <!-- CONTACT FORM SECTION - Added for user contact functionality -->
+    <div class="contact-form fade-in">
+      <h3>Get In Touch</h3>
+      <p>Have a question or want to connect? Send me a message!</p>
+      <!-- Form message container for success/error messages -->
+      <div id="form-message" class="form-message" style="display: none;"></div>
+      <form class="contact-form-container">
+        <!-- Contact form input fields -->
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+        </div>
+        <!-- Contact form submit button -->
+        <button type="submit" class="contact-submit-btn">Send Message</button>
+      </form>
+    </div>
+    <!-- END CONTACT FORM SECTION -->
+    
     <div class="social-grid">
       <a href="https://www.linkedin.com/in/brenda-mendoza-34a4082b6/" target="_blank" class="social-link">
         <i class="fab fa-linkedin"></i>
@@ -282,6 +309,67 @@
         navbar.style.background = 'rgba(10, 10, 15, 0.9)';
       }
     });
+
+    // Contact form handler - Sends form data to AWS Lambda
+    const LAMBDA_URL = 'https://r42df3eoc3k6bjs5kbp4kgw22q0allfc.lambda-url.us-east-2.on.aws/'; // Replace with your Function URL from Step 7
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.contact-form-container');
+    
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+    
+            const submitBtn = form.querySelector('.contact-submit-btn');
+            const messageDiv = document.getElementById('form-message');
+    
+            // Show loading state
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            messageDiv.style.display = 'none';
+    
+            // Get form data
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                message: form.message.value
+            };
+    
+            try {
+                const response = await fetch(LAMBDA_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+    
+                if (response.ok) {
+                    showMessage('Message sent successfully! Thank you for reaching out.', 'success');
+                    form.reset();
+                } else {
+                    showMessage('Failed to send message. Please try again.', 'error');
+                }
+            } catch (error) {
+                showMessage('Network error. Please check your connection and try again.', 'error');
+            }
+    
+            // Reset button
+            submitBtn.textContent = 'Send Message';
+            submitBtn.disabled = false;
+        });
+    });
+    
+    function showMessage(text, type) {
+        const messageDiv = document.getElementById('form-message');
+        messageDiv.textContent = text;
+        messageDiv.className = `form-message ${type}`;
+        messageDiv.style.display = 'block';
+    
+        // Auto-hide after 10 seconds
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 10000);
+    }
   </script>
 </body>
 </html>
