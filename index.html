@@ -9,8 +9,25 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <!-- Animated Background -->
-  <div class="bg-animation" id="bgAnimation"></div>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">Loading Cloud Portfolio...</div>
+    <div class="game-area">
+      <div class="cloud" id="cloud"></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent" style="opacity: 0;">
+    <!-- Pixel Bunny Explorer -->
+    <div class="pixel-bunny" id="pixelBunny"></div>
+    
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
 
   <!-- Navigation -->
   <header class="nav-header">
@@ -24,6 +41,10 @@
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
+      <button class="lang-toggle" onclick="toggleLanguage()">
+        <i class="fas fa-globe"></i>
+        <span id="langText">ES</span>
+      </button>
       <button class="theme-toggle" onclick="toggleTheme()">
         <i class="fas fa-sun"></i>
       </button>
@@ -186,6 +207,158 @@
   </footer>
 
   <script>
+    // Cloud Loading Animation
+    let progress = 0;
+    let cloudPosition = 0;
+    const totalDots = 8;
+    
+    function createDots() {
+      const dotsContainer = document.getElementById('dots');
+      for (let i = 0; i < totalDots; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.style.left = (i * 80 + 120) + 'px';
+        dotsContainer.appendChild(dot);
+      }
+    }
+    
+    function animateCloud() {
+      const cloud = document.getElementById('cloud');
+      const dots = document.querySelectorAll('.dot');
+      const progressFill = document.getElementById('progressFill');
+      
+      if (progress < totalDots) {
+        cloudPosition = progress * 80 + 80;
+        cloud.style.left = cloudPosition + 'px';
+        
+        if (dots[progress]) {
+          dots[progress].style.opacity = '0';
+          dots[progress].style.transform = 'translateY(-50%) scale(0)';
+        }
+        
+        progressFill.style.width = ((progress + 1) / totalDots * 100) + '%';
+        
+        progress++;
+        setTimeout(animateCloud, 300);
+      } else {
+        setTimeout(showMainContent, 500);
+      }
+    }
+
+    function showMainContent() {
+      const loadingScreen = document.getElementById('loadingScreen');
+      const mainContent = document.getElementById('mainContent');
+      
+      loadingScreen.style.opacity = '0';
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+        mainContent.style.opacity = '1';
+        mainContent.style.transition = 'opacity 1s ease-in-out';
+      }, 500);
+    }
+
+    // Start Cloud animation when page loads
+    window.addEventListener('load', () => {
+      createDots();
+      setTimeout(animateCloud, 500);
+    });
+
+    // Language Toggle
+    let isSpanish = false;
+    
+    function toggleLanguage() {
+      isSpanish = !isSpanish;
+      const langText = document.getElementById('langText');
+      
+      if (isSpanish) {
+        langText.textContent = 'EN';
+        translateToSpanish();
+      } else {
+        langText.textContent = 'ES';
+        translateToEnglish();
+      }
+    }
+    
+    function translateToSpanish() {
+      document.querySelector('.loading-text').textContent = 'Cargando Portafolio en la Nube...';
+      document.querySelector('.tagline').innerHTML = 'Capitana de AWS Cloud ✦ Constructora en la Nube ✦ Entusiasta de AWS<br>';
+      
+      // Navigation
+      document.querySelector('a[href="#about"]').textContent = 'Acerca';
+      document.querySelector('a[href="#fun-facts"]').textContent = 'Datos Curiosos';
+      document.querySelector('a[href="#skills"]').textContent = 'Habilidades';
+      document.querySelector('a[href="#contact"]').textContent = 'Contacto';
+      
+      // Sections
+      document.querySelector('#fun-facts h2').textContent = '✨ datos curiosos sobre mí';
+      document.querySelector('#skills h2').textContent = '🛠️ habilidades técnicas y herramientas';
+      document.querySelector('#contact h2').textContent = '🤝 Conectemos';
+      
+      // Cards
+      const cards = document.querySelectorAll('.card');
+      cards[0].querySelector('h3').textContent = '🚀 Desafío en Progreso';
+      cards[0].querySelector('p').innerHTML = 'Actualmente trabajando en <a href="https://builder.aws.com/content/31C2WxIDSQive7q2Dv5xNFCmYJj/aws-builder-challenge-2-build-a-website-on-the-cloud" target="_blank" style="color: var(--accent-primary); text-decoration: none;">AWS Builder Challenge #2</a>';
+      cards[1].querySelector('h3').textContent = '🎯 Meta de Aprendizaje';
+      cards[1].querySelector('p').textContent = '¡Construyendo mis habilidades un servicio de AWS a la vez - S3, CloudFront y más!';
+      cards[2].querySelector('h3').textContent = '💡 Proyecto Divertido';
+      cards[2].querySelector('p').textContent = '¡Este sitio web está alojado en Amazon S3 con CloudFront para entrega global!';
+      
+      // Buttons
+      document.querySelector('.cta.primary').innerHTML = '<i class="fab fa-aws"></i>Perfil AWS';
+      document.querySelector('.cta:not(.primary)').innerHTML = '<i class="fas fa-code"></i>Mis Habilidades';
+      
+      // Contact
+      document.querySelector('#contact p').textContent = '¡Siempre emocionada de conectar con otros entusiastas de la nube y desarrolladores!';
+      document.querySelector('.contact-form h3').textContent = 'Ponte en Contacto';
+      document.querySelector('.contact-form > p').textContent = '¿Tienes una pregunta o quieres conectar? ¡Envíame un mensaje!';
+      
+      // Form labels
+      document.querySelector('label[for="name"]').textContent = 'Nombre';
+      document.querySelector('label[for="email"]').textContent = 'Correo';
+      document.querySelector('label[for="message"]').textContent = 'Mensaje';
+      document.querySelector('.contact-submit-btn').textContent = 'Enviar Mensaje';
+    }
+    
+    function translateToEnglish() {
+      document.querySelector('.loading-text').textContent = 'Loading Cloud Portfolio...';
+      document.querySelector('.tagline').innerHTML = 'AWS Cloud Captain ✦ Cloud Builder ✦ AWS Enthusiast<br>';
+      
+      // Navigation
+      document.querySelector('a[href="#about"]').textContent = 'About';
+      document.querySelector('a[href="#fun-facts"]').textContent = 'Fun Facts';
+      document.querySelector('a[href="#skills"]').textContent = 'Skills';
+      document.querySelector('a[href="#contact"]').textContent = 'Contact';
+      
+      // Sections
+      document.querySelector('#fun-facts h2').textContent = '✨ fun facts about me';
+      document.querySelector('#skills h2').textContent = '🛠️ tech skills & tools';
+      document.querySelector('#contact h2').textContent = '🤝 Let\'s Connect';
+      
+      // Cards
+      const cards = document.querySelectorAll('.card');
+      cards[0].querySelector('h3').textContent = '🚀 Challenge In Progress';
+      cards[0].querySelector('p').innerHTML = 'Currently working on <a href="https://builder.aws.com/content/31C2WxIDSQive7q2Dv5xNFCmYJj/aws-builder-challenge-2-build-a-website-on-the-cloud" target="_blank" style="color: var(--accent-primary); text-decoration: none;">AWS Builder Challenge #2</a>';
+      cards[1].querySelector('h3').textContent = '🎯 Learning Goal';
+      cards[1].querySelector('p').textContent = 'Building my skills one AWS service at a time - S3, CloudFront, and beyond!';
+      cards[2].querySelector('h3').textContent = '💡 Fun Project';
+      cards[2].querySelector('p').textContent = 'This website is hosted on Amazon S3 with CloudFront for global delivery!';
+      
+      // Buttons
+      document.querySelector('.cta.primary').innerHTML = '<i class="fab fa-aws"></i>AWS Profile';
+      document.querySelector('.cta:not(.primary)').innerHTML = '<i class="fas fa-code"></i>My Skills';
+      
+      // Contact
+      document.querySelector('#contact p').textContent = 'Always excited to connect with fellow cloud enthusiasts and developers!';
+      document.querySelector('.contact-form h3').textContent = 'Get In Touch';
+      document.querySelector('.contact-form > p').textContent = 'Have a question or want to connect? Send me a message!';
+      
+      // Form labels
+      document.querySelector('label[for="name"]').textContent = 'Name';
+      document.querySelector('label[for="email"]').textContent = 'Email';
+      document.querySelector('label[for="message"]').textContent = 'Message';
+      document.querySelector('.contact-submit-btn').textContent = 'Send Message';
+    }
+
     // Theme Toggle
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -292,10 +465,34 @@
       });
     });
 
+    // Bunny Explorer
+    function startTotoro() {
+      const pet = document.getElementById('pixelBunny');
+      const windowWidth = window.innerWidth;
+      
+      // Reset position
+      pet.style.transition = 'none';
+      pet.style.left = '-70px';
+      
+      // Start walking after a brief moment
+      setTimeout(() => {
+        pet.style.transition = 'left 12s linear';
+        pet.style.left = (windowWidth + 70) + 'px';
+      }, 50);
+      
+      // Restart immediately after finishing
+      setTimeout(() => {
+        startTotoro();
+      }, 12100);
+    }
+    
     // Initialize animations
     document.addEventListener('DOMContentLoaded', () => {
       createFloatingCode();
       handleScrollAnimations();
+      
+      // Start Totoro walking after page loads
+      setTimeout(startTotoro, 3000);
       
       window.addEventListener('scroll', handleScrollAnimations);
     });
@@ -371,5 +568,6 @@
         }, 10000);
     }
   </script>
+  </div> <!-- End Main Content -->
 </body>
 </html>
