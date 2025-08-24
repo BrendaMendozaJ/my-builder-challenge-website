@@ -579,14 +579,16 @@ body::before {
   margin-left: 20px;
 }
 
-/* CONTACT FORM STYLES - Added for contact form functionality */
+/* CONTACT FORM STYLES - Updated to match dark theme */
 .contact-form {
-    background: white;
-    border-radius: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
     padding: 40px;
     margin-top: 40px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(25px) saturate(180%);
     position: relative;
+    box-shadow: var(--shadow-secondary);
 }
 
 /* Contact form decorative element */
@@ -597,23 +599,28 @@ body::before {
     right: 40px;
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-    border-radius: 6px;
+    background: var(--gradient-primary);
+    border-radius: 8px;
     opacity: 0.9;
+    animation: pixelFloat 3s ease-in-out infinite;
 }
 
 .contact-form h3 {
-    color: #232f3e;
-    font-size: 32px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
     font-weight: 700;
     margin-bottom: 16px;
-    letter-spacing: -0.02em;
     text-align: center;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .contact-form > p {
     font-size: 16px;
-    color: #687078;
+    color: var(--text-secondary);
     margin-bottom: 32px;
     text-align: center;
     line-height: 1.6;
@@ -627,23 +634,24 @@ body::before {
 
 /* Form message styles for success/error notifications */
 .form-message {
-    padding: 12px 16px;
-    border-radius: 6px;
+    padding: 15px 20px;
+    border-radius: 12px;
     margin-bottom: 24px;
     font-weight: 500;
     text-align: center;
+    backdrop-filter: blur(20px);
 }
 
 .form-message.success {
-    background: #dcfce7;
-    color: #166534;
-    border: 1px solid #bbf7d0;
+    background: rgba(39, 202, 63, 0.1);
+    color: #27ca3f;
+    border: 1px solid rgba(39, 202, 63, 0.3);
 }
 
 .form-message.error {
-    background: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
+    background: rgba(255, 95, 86, 0.1);
+    color: #ff5f56;
+    border: 1px solid rgba(255, 95, 86, 0.3);
 }
 
 .form-group {
@@ -653,30 +661,37 @@ body::before {
 .form-group label {
     display: block;
     font-weight: 600;
-    color: #232f3e;
+    color: var(--accent-primary);
     margin-bottom: 8px;
     font-size: 16px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Contact form input and textarea styles */
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
+    padding: 15px 20px;
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
     font-size: 16px;
-    font-family: inherit;
-    background: #f8fafc;
-    transition: all 0.2s ease;
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #7877c6;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(120, 119, 198, 0.1);
+    border-color: var(--accent-primary);
+    background: var(--bg-tertiary);
+    box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted);
 }
 
 .form-group textarea {
@@ -686,22 +701,30 @@ body::before {
 
 /* Contact form submit button */
 .contact-submit-btn {
-    background: #7877c6;
-    color: white;
-    padding: 12px 32px;
+    background: var(--gradient-primary);
+    color: var(--bg-primary);
+    padding: 18px 35px;
     border: none;
-    border-radius: 6px;
-    font-weight: 500;
+    border-radius: 50px;
+    font-weight: 600;
     font-size: 16px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: block;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .contact-submit-btn:hover {
-    background: #6b6ab8;
-    transform: translateY(-1px);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(100, 255, 218, 0.4);
+}
+
+.contact-submit-btn:disabled {
+    opacity: 0.7;
+    transform: none;
+    box-shadow: none;
 }
 
 /* END CONTACT FORM STYLES */
