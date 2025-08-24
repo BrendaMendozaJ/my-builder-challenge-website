@@ -268,21 +268,17 @@ body::before {
     var(--shadow-primary),
     inset 0 0 0 4px var(--bg-primary);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: grayscale(100%) contrast(1.1);
+  filter: brightness(0.9) contrast(1.1) saturate(1.2);
   position: relative;
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
 }
 
 .profile-photo:hover {
-  filter: grayscale(0%) contrast(1.2) brightness(1.1);
+  filter: brightness(1.1) contrast(1.3) saturate(1.5) hue-rotate(5deg);
   transform: scale(1.08) rotate(2deg);
   box-shadow: 
-    0 25px 80px rgba(100, 255, 218, 0.3),
-    0 0 50px rgba(199, 146, 234, 0.2),
+    0 25px 80px rgba(100, 255, 218, 0.4),
+    0 0 50px rgba(199, 146, 234, 0.3),
     inset 0 0 0 4px var(--bg-primary);
-  image-rendering: pixelated;
 }
 
 .pixel-decoration {
@@ -963,6 +959,25 @@ body::before {
 }
 
 
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-direction: row;
+}
+
+.nav-bunny {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.nav-bunny:hover {
+  opacity: 1;
+}
 
 /* Scroll Animations */
 .fade-in {
